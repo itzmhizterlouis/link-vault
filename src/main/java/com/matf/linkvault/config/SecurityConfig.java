@@ -19,6 +19,7 @@ public class SecurityConfig {
 
          return http.authorizeHttpRequests(auth ->
              auth
+                     .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                      .anyRequest().authenticated())
                  .oauth2Login(Customizer.withDefaults())
                  .logout(l -> l
