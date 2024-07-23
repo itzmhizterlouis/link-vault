@@ -1,7 +1,9 @@
 package com.matf.linkvault.config;
 
 
+import com.matf.linkvault.exceptions.IncorrectEmailOrPasswordException;
 import com.matf.linkvault.exceptions.UserAlreadyExistsException;
+import com.matf.linkvault.exceptions.UserNotFoundException;
 import com.matf.linkvault.models.responses.AppResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,30 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler({DataIntegrityViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public AppResponse handleDataIntegrityViolationException(DataIntegrityViolationException exception) {
+
+        log.error(String.valueOf(exception));
+        return AppResponseUtil.buildErrorResponse(exception.getMessage());
+    }
+
+    @ExceptionHandler({IncorrectEmailOrPasswordException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public AppResponse handleIncorrectUsernameOrPasswordException(IncorrectEmailOrPasswordException exception) {
+
+        log.error(String.valueOf(exception));
+        return AppResponseUtil.buildErrorResponse(exception.getMessage());
+    }
+
+    @ExceptionHandler({UserNotFoundException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public AppResponse handleUserNotFoundException(UserNotFoundException exception) {
+
+        log.error(String.valueOf(exception));
+        return AppResponseUtil.buildErrorResponse(exception.getMessage());
+    }
+
+    @ExceptionHandler({Exception.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public AppResponse handleWildCardException(Exception exception) {
 
         log.error(String.valueOf(exception));
         return AppResponseUtil.buildErrorResponse(exception.getMessage());

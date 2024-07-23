@@ -1,6 +1,6 @@
 package com.matf.linkvault.exceptions;
 
-public class UserAlreadyExistsException extends Exception{
+public class UserAlreadyExistsException extends ClientSideException{
 
     public UserAlreadyExistsException(String email) {
 
