@@ -1,0 +1,31 @@
+server:
+  servlet:
+    context-path: /api/v1
+
+spring:
+  application:
+  name: Link Vault
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/link_vault
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    generate-ddl: false
+    show-sql: true
+
+  flyway:
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    enabled: true
+
+  mvc:
+    static-path-pattern: /swagger*
