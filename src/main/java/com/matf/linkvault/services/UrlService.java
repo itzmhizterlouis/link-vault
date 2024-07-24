@@ -3,12 +3,15 @@ package com.matf.linkvault.services;
 
 import com.matf.linkvault.exceptions.UserNotFoundException;
 import com.matf.linkvault.models.entities.Url;
+import com.matf.linkvault.models.entities.UrlNameParam;
 import com.matf.linkvault.models.requests.UrlRequest;
 import com.matf.linkvault.models.responses.GenericResponse;
 import com.matf.linkvault.repositories.UrlRepository;
-import com.matf.linkvault.repositories.UserRepository;
+import com.matf.linkvault.utils.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -16,31 +19,31 @@ public class UrlService {
 
     private final UrlRepository urlRepository;
 
-    private final UserRepository userRepository;
+    public GenericResponse saveUrl(UrlRequest urlRequest) throws UserNotFoundException {
 
-//    public GenericResponse saveUrl(UrlRequest urlRequest, OAuth2User principal) throws UserNotFoundException {
-//
-//        throwErrorIfUserDoesntExist(principal);
-//
-//        urlRepository.save(Url.builder()
-//                .url(urlRequest.getUrl())
-//                .name(urlRequest.getName())
-//                .folderName(urlRequest.getFolderName())
-//                .userId(userRepository.findByEmail(principal.getAttribute("email")).orElseThrow(UserNotFoundException::new).getUserId())
-//                .tags(urlRequest.getTags().stream().map(String::toUpperCase).toList())
-//                .build()
-//        );
-//
-//        return GenericResponse.builder()
-//                .message("Url has been saved.")
-//                .build();
-//    }
-//
-//    private void throwErrorIfUserDoesntExist(OAuth2User principal) throws UserNotFoundException {
-//
-//        if (!userRepository.existsByEmail(principal.getAttribute("email"))){
-//
-//            throw new UserNotFoundException();
-//        }
-//    }
+        urlRepository.save(Url.builder()
+                .url(urlRequest.getUrl())
+                .name(urlRequest.getName())
+                .folderName(urlRequest.getFolderName())
+                .userId(UserUtil.getLoggedInUser().get().getUserId())
+                .tags(urlRequest.getTags().stream().map(String::toUpperCase).toList())
+                .build()
+        );
+
+        return GenericResponse.builder()
+                .message("Url has been saved.")
+                .build();
+    }
+
+    public List<Url> findAllBasedOnParam(UrlNameParam param) throws UserNotFoundException {
+
+        int userId = UserUtil.getLoggedInUser().get().getUserId();
+
+        if (param.equals(UrlNameParam.NAMED)) {
+
+            return urlRepository.findAllByNameNotNullAndUserId(userId);
+        }
+
+        return urlRepository.findAllByNameNullAndUserId(userId);
+    }
 }
