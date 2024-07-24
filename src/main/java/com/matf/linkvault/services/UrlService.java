@@ -13,6 +13,7 @@ import com.matf.linkvault.models.responses.GenericResponse;
 import com.matf.linkvault.repositories.FolderRepository;
 import com.matf.linkvault.repositories.UrlRepository;
 import com.matf.linkvault.utils.UserUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -121,5 +122,30 @@ public class UrlService {
 
         return GenericResponse.builder()
                 .message("Folder has been successfully updated").build();
+    }
+
+    @Transactional
+    public GenericResponse deleteUrl(int urlId) throws UserNotFoundException {
+
+        Url url = urlRepository.findByUrlIdAndUserId(urlId, UserUtil.getLoggedInUser().get().getUserId()).orElseThrow(UserNotFoundException::new);
+
+        urlRepository.delete(url);
+
+        return GenericResponse.builder()
+                .message("Url has been successfully deleted").build();
+    }
+
+    @Transactional
+    public GenericResponse deleteFolder(int folderId) throws UserNotFoundException {
+
+        Folder folder = folderRepository.findByFolderIdAndUserId(folderId, UserUtil.getLoggedInUser().get().getUserId()).orElseThrow(FolderNotFoundException::new);
+
+        urlRepository.deleteAllByFolderIdAndUserId(folderId, UserUtil.getLoggedInUser().get().getUserId());
+
+        folderRepository.delete(folder);
+
+        return GenericResponse.builder()
+                .message("Folder with all links in folder has been deleted")
+                .build();
     }
 }

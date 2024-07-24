@@ -17,4 +17,8 @@ public interface UrlRepository extends JpaRepository<Url, Long> {
     List<Url> findAllByFolderIdAndUserId(int folderId, int userId);
 
     Optional<Url> findByUrlId(int urlId);
+
+    Optional<Url> findByUrlIdAndUserId(int urlId, int userId);
+
+    void deleteAllByFolderIdAndUserId(int folderId, int userId);
 }
