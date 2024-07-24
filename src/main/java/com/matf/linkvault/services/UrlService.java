@@ -1,6 +1,7 @@
 package com.matf.linkvault.services;
 
 
+import com.matf.linkvault.exceptions.FolderNotFoundException;
 import com.matf.linkvault.exceptions.UrlNotFoundException;
 import com.matf.linkvault.exceptions.UserNotFoundException;
 import com.matf.linkvault.models.entities.Folder;
@@ -108,5 +109,17 @@ public class UrlService {
                 url.setFolderId(folderId);
             }
         }
+    }
+
+    public GenericResponse editFolder(FolderRequest request, int folderId) throws UserNotFoundException {
+
+        Folder folder = folderRepository.findByFolderIdAndUserId(folderId, UserUtil.getLoggedInUser().get().getUserId()).orElseThrow(FolderNotFoundException::new);
+
+        folder.setFolderName(request.getFolderName());
+
+        folderRepository.save(folder);
+
+        return GenericResponse.builder()
+                .message("Folder has been successfully updated").build();
     }
 }

@@ -62,4 +62,10 @@ public class UrlController {
 
         return urlService.editUrl(request, urlId);
     }
+
+    @PutMapping("folders/{folderId}")
+    public GenericResponse editFolder(@RequestBody FolderRequest request, @PathVariable int folderId) throws UserNotFoundException {
+
+        return urlService.editFolder(request, folderId);
+    }
 }
