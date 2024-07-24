@@ -30,7 +30,7 @@ public class Url {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int urlId;
 
-    private String folderName;
+    private int folderId;
     private String name;
     private String url;
     private int userId;
