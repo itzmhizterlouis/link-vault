@@ -7,9 +7,9 @@ spring:
   name: Link Vault
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/link_vault
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://dpg-cqgd8q5ds78s73ccu0lg-a.oregon-postgres.render.com:5432/link_vault
+    username: user
+    password: 2idEqdiYgrElrTQnjw33OQ5M0K6cRBtJ
     driver-class-name: org.postgresql.Driver
 
   jpa:
