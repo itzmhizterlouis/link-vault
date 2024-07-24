@@ -134,4 +134,18 @@ public class UrlService {
         return GenericResponse.builder()
                 .message("Url has been successfully deleted").build();
     }
+
+    @Transactional
+    public GenericResponse deleteFolder(int folderId) throws UserNotFoundException {
+
+        Folder folder = folderRepository.findByFolderIdAndUserId(folderId, UserUtil.getLoggedInUser().get().getUserId()).orElseThrow(FolderNotFoundException::new);
+
+        urlRepository.deleteAllByFolderIdAndUserId(folderId, UserUtil.getLoggedInUser().get().getUserId());
+
+        folderRepository.delete(folder);
+
+        return GenericResponse.builder()
+                .message("Folder with all links in folder has been deleted")
+                .build();
+    }
 }

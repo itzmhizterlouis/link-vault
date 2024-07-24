@@ -78,9 +78,17 @@ public class UrlController {
         return urlService.editFolder(request, folderId);
     }
 
+    @Operation(summary = "Delete Url")
     @DeleteMapping("{urlId}")
-    public GenericResponse deleteFolder(@PathVariable int urlId) throws UserNotFoundException {
+    public GenericResponse deleteUrl(@PathVariable int urlId) throws UserNotFoundException {
 
         return urlService.deleteUrl(urlId);
+    }
+
+    @Operation(summary = "Delete Folder")
+    @DeleteMapping("folders/{folderId}")
+    public GenericResponse deleteFolder(@PathVariable int folderId) throws UserNotFoundException {
+
+        return urlService.deleteFolder(folderId);
     }
 }
