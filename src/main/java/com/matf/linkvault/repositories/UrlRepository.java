@@ -11,8 +11,7 @@ import java.util.Optional;
 @Repository
 public interface UrlRepository extends JpaRepository<Url, Long> {
 
-    List<Url> findAllByNameNotNullAndUserId(int userId);
-    List<Url> findAllByNameNullAndUserId(int userId);
+    List<Url> findAllByUserId(int userId);
 
     List<Url> findAllByFolderIdAndUserId(int folderId, int userId);
 

@@ -4,7 +4,6 @@ package com.matf.linkvault.controllers;
 import com.matf.linkvault.exceptions.UserNotFoundException;
 import com.matf.linkvault.models.entities.Folder;
 import com.matf.linkvault.models.entities.Url;
-import com.matf.linkvault.models.entities.UrlNameParam;
 import com.matf.linkvault.models.requests.FolderRequest;
 import com.matf.linkvault.models.requests.UrlRequest;
 import com.matf.linkvault.models.responses.GenericResponse;
@@ -29,18 +28,18 @@ public class UrlController {
 
     private final UrlService urlService;
 
-    @Operation(summary = "Save Url can also be used for the endpoint to create folder where the user selects url to save")
+    @Operation(summary = "Save a List of Urls, Don't add the folder name to the request for folderless urls")
     @PostMapping
-    public GenericResponse saveUrl(@RequestBody UrlRequest urlRequest) throws UserNotFoundException {
+    public GenericResponse saveUrls(@RequestBody List<UrlRequest> urlRequests) throws UserNotFoundException {
 
-        return urlService.saveUrl(urlRequest);
+        return urlService.saveUrl(urlRequests);
     }
 
-    @Operation(summary = "Get named or unnamed links")
-    @GetMapping("{param}")
-    public List<Url> getByNameParam(@PathVariable UrlNameParam param) throws UserNotFoundException {
+    @Operation(summary = "Get list of urls")
+    @GetMapping
+    public List<Url> getByNameParam() throws UserNotFoundException {
 
-        return urlService.findAllBasedOnParam(param);
+        return urlService.getAllUrls();
     }
 
     @Operation(summary = "Get all urls in a folder for a specific user")
@@ -57,11 +56,11 @@ public class UrlController {
         return urlService.findAllFolders();
     }
 
-    @Operation(summary = "Create folder when there's no url provided")
+    @Operation(summary = "Create folders, Folder Name = -1 for unnamed folders")
     @PostMapping("folders")
-    public Folder createFolder(@RequestBody FolderRequest request) throws UserNotFoundException {
+    public GenericResponse saveFolders(@RequestBody List<FolderRequest> requests) throws UserNotFoundException {
 
-        return urlService.createFolder(request);
+        return urlService.saveFolders(requests);
     }
 
     @Operation(summary = "Edit Url can also be used for the edit folder where url is provided")

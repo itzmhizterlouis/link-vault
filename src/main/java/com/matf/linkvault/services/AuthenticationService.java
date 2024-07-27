@@ -1,13 +1,13 @@
 package com.matf.linkvault.services;
 
 import com.matf.linkvault.config.JwtService;
-import com.matf.linkvault.exceptions.IncorrectEmailOrPasswordException;
 import com.matf.linkvault.exceptions.UserNotFoundException;
+import com.matf.linkvault.models.entities.Folder;
 import com.matf.linkvault.models.entities.User;
 import com.matf.linkvault.models.requests.LoginRequest;
 import com.matf.linkvault.models.requests.RegisterRequest;
 import com.matf.linkvault.models.responses.RegisterResponse;
-import com.matf.linkvault.models.responses.SignUpResponse;
+import com.matf.linkvault.repositories.FolderRepository;
 import com.matf.linkvault.repositories.UserRepository;
 import com.matf.linkvault.utils.UserUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +26,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
+    private final FolderRepository folderRepository;
 
 
     public RegisterResponse registerUser(RegisterRequest request) {
@@ -40,6 +41,12 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
 
         userRepository.save(user);
+
+        folderRepository.save(Folder.builder()
+                .folderName("-1")
+                .userId(user.getUserId())
+                .build()
+        );
 
         return RegisterResponse.builder()
                 .firstName(user.getFirstName())
